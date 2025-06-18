@@ -8,6 +8,7 @@ CFLAGS=-mcpu=cortex-m33 -mthumb -nostdlib -Wall -O2 -ffreestanding -fno-common
 LDFLAGS=-T linker.ld
 
 TARGET=firmware
+BOOTMNT=/run/media/filip/RP2350/
 
 BUILD_DIR := build
 BIN_DIR := bin
@@ -20,7 +21,7 @@ OBJ_C := $(patsubst %.c,$(BUILD_DIR)/%.o,$(SRC_C))
 OBJ_S := $(patsubst %.s,$(BUILD_DIR)/%.o,$(SRC_S))
 OBJ := $(OBJ_C) $(OBJ_S)
 
-.PHONY: all clean
+.PHONY: all clean upload
 
 all: directories $(BIN_DIR)/$(TARGET).uf2
 
@@ -43,6 +44,9 @@ $(BUILD_DIR)/%.o: %.s | directories
 # Convert ELF to UF2 in bin directory
 $(BIN_DIR)/$(TARGET).uf2: $(BIN_DIR)/$(TARGET).elf
 	$(ELF2UF2) uf2 convert $< $@
+
+upload:
+	cp $(BIN_DIR)/$(TARGET).uf2 $(BOOTMNT)
 
 clean:
 	clear 
