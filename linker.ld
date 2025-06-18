@@ -8,6 +8,10 @@ MEMORY{
 _stack_top = ORIGIN(RAM) + LENGTH(RAM);
 
 SECTIONS {
+    .picobin_block : {
+        KEEP(*(.text.picobin_block))
+    } > FLASH
+
     .boot : ALIGN(256){ 
         KEEP(*(.text.boot))
     } > FLASH
